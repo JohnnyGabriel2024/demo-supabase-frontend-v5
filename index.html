@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú Principal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ecf0f1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 300px;
+    }
+
+    .menu-button {
+      display: block;
+      background-color: #3498db;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .menu-button:hover {
+      background-color: #2980b9;
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #95a5a6;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Menú Principal</h1>
+
+  <div class="menu-container">
+    
+    <a href="clientes.html" class="menu-button">Consultar Clientes</a>
+    <a href="gestion_clientes.html" class="menu-button">Registrar Cliente</a>
+    <a href="productos.html" class="menu-button">Consultar Productos</a>
+    <a href="gestion_productos.html" class="menu-button">Registrar Productos</a>
+  <!--
+    <a href="ordenes.html" class="menu-button">Ver Órdenes</a>
+    <a href="items_orden.html" class="menu-button">Ver Ítems de Órdenes</a>
+  -->
+  </div>
+
+  <footer>
+    &copy; 2025 Sistema de Gestión - CRM Clientes
+  </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,137 @@
+<!-- archivo productos.html, idéntico en estructura, estilo y comportamiento a clientes.html, pero adaptado para mostrar la información de la tabla "Product" con los siguientes campos:
+    product_id
+    product_name
+    description
+    price
+    stock
+
+Se mantiene el diseño visual, el mensaje de carga de 2 segundos, la conexión con Supabase y el botón para volver al menú principal.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Productos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: #ecf0f1;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .loading {
+      font-size: 16px;
+      color: #7f8c8d;
+    }
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Listado de Productos</h1>
+
+  <p class="loading" id="loading">Cargando productos, por favor espere...</p>
+
+  <table id="productsTable">
+    <thead>
+      <tr>
+        <th>ID Producto</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <a href="index.html" class="back-button">Volver al Menú Principal</a>
+
+  <script>
+    const SUPABASE_URL = 'https://vvglxxnyiscywnbotxfq.supabase.co';
+    const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2Z2x4eG55aXNjeXduYm90eGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4Nzc5MzYsImV4cCI6MjA2MzQ1MzkzNn0.LchIVh3PZpMLsFFi6BH0ybIDDW8790WjeCj0rVY1IYk';
+
+    const tableBody = document.querySelector('#productsTable tbody');
+    tableBody.innerHTML = '';
+
+    fetch(`${SUPABASE_URL}/rest/v1/Product?select=*`, {
+      headers: {
+        apikey: SUPABASE_API_KEY,
+        Authorization: `Bearer ${SUPABASE_API_KEY}`,
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      setTimeout(() => {
+        const loadingText = document.getElementById('loading');
+        const tbody = document.querySelector('#productsTable tbody');
+
+        loadingText.style.display = 'none';
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">No hay productos registrados.</td></tr>';
+          return;
+        }
+
+        data.forEach(product => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${product.product_id}</td>
+            <td>${product.product_name}</td>
+            <td>${product.description}</td>
+            <td>${product.price}</td>
+            <td>${product.stock}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }, 2000); // ⏳ Espera de 2 segundos antes de mostrar los registros
+    })
+    .catch(error => {
+      console.error('Error al obtener productos:', error);
+      const loadingText = document.getElementById('loading');
+      loadingText.textContent = 'Error al cargar productos. Revisa la consola para más detalles.';
+      loadingText.style.color = 'red';
+    });
+  </script>
+
+</body>
+</html>
+
