@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Pedidos</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Detalle de Pedidos</h1>
+  <div id="tabla-ordenes">Cargando datos...</div>
+
+  <script>
+    const SUPABASE_URL = 'https://vvglxxnyiscywnbotxfq.supabase.co';
+    const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2Z2x4eG55aXNjeXduYm90eGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4Nzc5MzYsImV4cCI6MjA2MzQ1MzkzNn0.LchIVh3PZpMLsFFi6BH0ybIDDW8790WjeCj0rVY1IYk';
+
+    async function obtenerDetalleOrdenes() {
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/vista_orden_detalle`, {
+          method: 'GET',
+          headers: {
+            apikey: SUPABASE_API_KEY,
+            Authorization: `Bearer ${SUPABASE_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const datos = await response.json();
+
+        if (!Array.isArray(datos) || datos.length === 0) {
+          document.getElementById('tabla-ordenes').innerText = 'No hay datos disponibles.';
+          return;
+        }
+
+        let html = `<table>
+          <thead>
+            <tr>
+              <th>ID Orden</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Cantidad</th>
+              <th>Producto</th>
+              <th>Precio Unitario</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+        for (const fila of datos) {
+          html += `
+            <tr>
+              <td>${fila.order_id}</td>
+              <td>${fila.order_date}</td>
+              <td>${fila.customer_name}</td>
+              <td>${fila.quantity}</td>
+              <td>${fila.product_name}</td>
+              <td>${fila.unit_price}</td>
+            </tr>`;
+        }
+
+        html += `</tbody></table>`;
+        document.getElementById('tabla-ordenes').innerHTML = html;
+
+      } catch (error) {
+        console.error('Error al consultar Supabase:', error);
+        document.getElementById('tabla-ordenes').innerText = 'Error al cargar los datos.';
+      }
+    }
+
+    obtenerDetalleOrdenes();
+  </script>
+</body>
+</html>

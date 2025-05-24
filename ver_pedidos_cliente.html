@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Órdenes - Supabase REST</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #003366; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #0073e6; color: white; }
+    .loading, .error { margin-top: 10px; font-weight: bold; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+<h1>Órdenes Supabase REST</h1>
+<div id="status" class="loading">Cargando órdenes...</div>
+
+<table id="ordenes-table" style="display:none;">
+  <thead>
+    <tr>
+      <th>ID Orden</th>
+      <th>Fecha</th>
+      <th>ID Cliente</th>
+      <th>Monto Total</th>
+    </tr>
+  </thead>
+  <tbody id="ordenes-body"></tbody>
+</table>
+
+<script>
+  const SUPABASE_URL = 'https://vvglxxnyiscywnbotxfq.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2Z2x4eG55aXNjeXduYm90eGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4Nzc5MzYsImV4cCI6MjA2MzQ1MzkzNn0.LchIVh3PZpMLsFFi6BH0ybIDDW8790WjeCj0rVY1IYk';
+
+  async function cargarOrdenes() {
+    const statusDiv = document.getElementById('status');
+    const table = document.getElementById('ordenes-table');
+    const tbody = document.getElementById('ordenes-body');
+
+    const url = `${SUPABASE_URL}/rest/v1/OrderEntity?select=order_id,order_date,customer_id,total_amount`;
+
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      tbody.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        statusDiv.textContent = 'No se encontraron órdenes.';
+        table.style.display = 'none';
+        return;
+      }
+
+      statusDiv.style.display = 'none';
+      table.style.display = 'table';
+
+      data.forEach(order => {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+          <td>${order.order_id}</td>
+          <td>${order.order_date}</td>
+          <td>${order.customer_id}</td>
+          <td>${parseFloat(order.total_amount).toFixed(2)}</td>
+        `;
+        tbody.appendChild(fila);
+      });
+
+    } catch (error) {
+      statusDiv.textContent = `Error: ${error.message}`;
+      statusDiv.className = 'error';
+      table.style.display = 'none';
+    }
+  }
+
+  window.onload = cargarOrdenes;
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
