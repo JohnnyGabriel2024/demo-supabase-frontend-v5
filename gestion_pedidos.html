@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrar Pedido</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <style>
+    body { padding: 2rem; background-color: #f8f9fa; }
+    h2 { margin-bottom: 2rem; }
+    .form-section { background-color: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    .producto-item { margin-bottom: 1rem; }
+
+      /* Botón de regreso al menú principal */
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    /* Efecto hover del botón de regreso */
+    .back-button:hover {
+      background-color: #2980b9;
+    }
+ 
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="form-section">
+      <h2>Registrar Nuevo Pedido</h2>
+
+      <form id="pedido-form">
+        <div class="mb-3">
+          <label for="cliente" class="form-label">Cliente</label>
+          <select id="cliente" name="cliente" class="form-select" required></select>
+        </div>
+
+        <div id="productos-container" class="mb-3"></div>
+
+        <button type="button" class="btn btn-secondary mb-3" onclick="agregarProducto()">+ Agregar Producto</button>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Registrar Pedido</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    <!-- Enlace para regresar al menú principal -->
+  <a href="index.html" class="back-button">Volver al Menú Principal</a>
+
+
+  <script>
+    const SUPABASE_URL = 'https://vvglxxnyiscywnbotxfq.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2Z2x4eG55aXNjeXduYm90eGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4Nzc5MzYsImV4cCI6MjA2MzQ1MzkzNn0.LchIVh3PZpMLsFFi6BH0ybIDDW8790WjeCj0rVY1IYk';
+
+    let productos = [];
+
+    async function cargarClientes() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/Customer`, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      const clientes = await res.json();
+      const select = document.getElementById('cliente');
+      clientes.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.customer_id;
+        option.text = `${c.name}`;
+        select.appendChild(option);
+      });
+    }
+
+    async function cargarProductos() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/Product`, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      productos = await res.json();
+    }
+
+    function agregarProducto() {
+      const div = document.createElement('div');
+      div.classList.add('row', 'producto-item');
+
+      const selectCol = document.createElement('div');
+      selectCol.className = 'col-md-8';
+      const select = document.createElement('select');
+      select.className = 'form-select';
+      select.required = true;
+      productos.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.product_id;
+        option.text = `${p.product_name} - $${p.price}`;
+        select.appendChild(option);
+      });
+      selectCol.appendChild(select);
+
+      const qtyCol = document.createElement('div');
+      qtyCol.className = 'col-md-4';
+      const cantidad = document.createElement('input');
+      cantidad.type = 'number';
+      cantidad.min = 1;
+      cantidad.placeholder = 'Cantidad';
+      cantidad.className = 'form-control';
+      cantidad.required = true;
+      qtyCol.appendChild(cantidad);
+
+      div.appendChild(selectCol);
+      div.appendChild(qtyCol);
+      document.getElementById('productos-container').appendChild(div);
+    }
+
+    document.getElementById('pedido-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const cliente_id = document.getElementById('cliente').value;
+      const fecha = new Date().toISOString().split('T')[0];
+
+      let total = 0;
+      const items = [];
+
+      document.querySelectorAll('.producto-item').forEach(row => {
+        const product_id = row.querySelector('select').value;
+        const quantity = parseInt(row.querySelector('input').value);
+        const producto = productos.find(p => p.product_id == product_id);
+        const unit_price = parseFloat(producto.price);
+        total += unit_price * quantity;
+        items.push({ product_id, quantity, unit_price });
+      });
+
+      // Insertar OrderEntity
+      const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/OrderEntity`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify({
+          order_date: fecha,
+          customer_id: cliente_id,
+          total_amount: total.toFixed(2)
+        })
+      });
+
+      const orderData = await orderRes.json();
+      const order_id = orderData[0].order_id;
+
+      // Insertar OrderItems
+      for (let item of items) {
+        await fetch(`${SUPABASE_URL}/rest/v1/OrderItem`, {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            order_id: order_id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            unit_price: item.unit_price
+          })
+        });
+      }
+
+      alert('Pedido registrado exitosamente.');
+      document.getElementById('pedido-form').reset();
+      document.getElementById('productos-container').innerHTML = '';
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await cargarClientes();
+      await cargarProductos();
+      agregarProducto();
+    });
+  </script>
+</body>
+</html>
+
