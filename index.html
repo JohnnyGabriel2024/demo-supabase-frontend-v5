@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Menú Principal</title>
+  <title>01 - Menú Principal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -21,32 +21,40 @@
       align-items: center;
       justify-content: center;
 
-      /* Imagen de fondo */
-      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-        url('https://images.pexels.com/photos/3182763/pexels-photo-3182763.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      /* Fondo gris claro */
+      background-color: rgb(202, 198, 198);
     }
 
     h1 {
-      color: #fff;
+      color: blue;
       margin-bottom: 30px;
       font-size: 2.8rem;
       text-align: center;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     }
 
     .menu-container {
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: #ffffff;
       padding: 30px 20px;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       width: 100%;
-      max-width: 400px;
+      max-width: 500px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 24px;
+    }
+
+    .menu-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #007BFF;
+      margin-bottom: 4px;
     }
 
     .menu-button {
@@ -56,7 +64,7 @@
       padding: 14px;
       text-decoration: none;
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       border-radius: 12px;
       transition: background-color 0.3s, transform 0.2s;
     }
@@ -68,10 +76,9 @@
 
     footer {
       margin-top: 40px;
-      color: #ecf0f1;
+      color: #666;
       font-size: 0.9rem;
       text-align: center;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     }
 
     @media (max-width: 500px) {
@@ -89,22 +96,39 @@
         font-size: 1rem;
         padding: 12px;
       }
+
+      .menu-title {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Menú Principal</h1>
+  <h1>CRM Cliente - Menú Principal</h1>
 
   <div class="menu-container">
-    <a href="gestion_clientes.html" class="menu-button">Registrar Cliente</a>
-    <a href="clientes.html" class="menu-button">Consultar Clientes</a>
-    <a href="gestion_productos.html" class="menu-button">Registrar Producto</a>
-    <a href="productos.html" class="menu-button">Consultar Productos</a>
-    <a href="gestion_pedidos.html" class="menu-button">Registrar Pedido</a>
-    <a href="ver_pedidos_cliente.html" class="menu-button">Vista de Pedidos</a>
-    <a href="clientes_pedidos.html" class="menu-button">Vista de Pedidos por cliente</a>
-    <a href="vista_orden_detalle.html" class="menu-button">Vista detalle de Pedidos</a>
+
+    <div class="menu-group">
+      <div class="menu-title">Clientes</div>
+      <a href="gestion_clientes.html" class="menu-button">Registrar Cliente</a>
+      <a href="clientes.html" class="menu-button">Consultar Clientes</a>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">Productos</div>
+      <a href="gestion_productos.html" class="menu-button">Registrar Producto</a>
+      <a href="productos.html" class="menu-button">Consultar Productos</a>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">Pedidos</div>
+      <a href="gestion_pedidos.html" class="menu-button">Registrar Pedido</a>
+      <a href="ver_pedidos_cliente.html" class="menu-button">Vista de Pedidos</a>
+      <a href="clientes_pedidos.html" class="menu-button">Vista de Pedidos por Cliente</a>
+      <a href="vista_orden_detalle.html" class="menu-button">Vista Detalle de Pedidos</a>
+    </div>
+
   </div>
 
   <footer>
@@ -113,5 +137,3 @@
 
 </body>
 </html>
-
-
