@@ -12,6 +12,23 @@
     th { background-color: #0073e6; color: white; }
     .loading, .error { margin-top: 10px; font-weight: bold; }
     .error { color: red; }
+
+        /* Botón de regreso al menú principal */
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    /* Efecto hover del botón de regreso */
+    .back-button:hover {
+      background-color: #2980b9;
+    }
+
   </style>
 </head>
 <body>
@@ -30,6 +47,8 @@
   </thead>
   <tbody id="ordenes-body"></tbody>
 </table>
+
+<a href="index.html" class="back-button">Volver al Menú Principal</a>
 
 <script>
   const SUPABASE_URL = 'https://vvglxxnyiscywnbotxfq.supabase.co';
