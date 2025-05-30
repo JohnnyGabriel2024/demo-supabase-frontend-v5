@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú Principal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      /* Imagen de fondo */
+      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+        url('https://images.pexels.com/photos/3182763/pexels-photo-3182763.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    h1 {
+      color: #fff;
+      margin-bottom: 30px;
+      font-size: 2.8rem;
+      text-align: center;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .menu-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .menu-button {
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .menu-button:hover {
+      background-color: #0056b3;
+      transform: scale(1.02);
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #ecf0f1;
+      font-size: 0.9rem;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .menu-container {
+        padding: 20px 16px;
+        border-radius: 12px;
+      }
+
+      .menu-button {
+        font-size: 1rem;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Menú Principal</h1>
+
+  <div class="menu-container">
+    <a href="gestion_clientes.html" class="menu-button">Registrar Cliente</a>
+    <a href="clientes.html" class="menu-button">Consultar Clientes</a>
+    <a href="gestion_productos.html" class="menu-button">Registrar Producto</a>
+    <a href="productos.html" class="menu-button">Consultar Productos</a>
+    <a href="gestion_pedidos.html" class="menu-button">Registrar Pedido</a>
+    <a href="ver_pedidos_cliente.html" class="menu-button">Vista de Pedidos</a>
+    <a href="clientes_pedidos.html" class="menu-button">Vista de Pedidos por cliente</a>
+    <a href="vista_orden_detalle.html" class="menu-button">Vista detalle de Pedidos</a>
+    <a href="galería_imagenes.html" class="menu-button">Galería de Imágenes</a>
+  </div>
+
+  <footer>
+    &copy; 2025 Sistema de Gestión - CRM Clientes
+  </footer>
+
+</body>
+</html>
+
+
